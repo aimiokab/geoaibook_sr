@@ -1,0 +1,18 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - datamodule: pastis # choose datamodule with `test_dataloader()` for evaluation
+  - model: image_cfm_SR_RGBNIR
+  - logger: csv
+  - trainer: default
+  - paths: default
+  - extras: default
+  - hydra: default
+  - optional local: default
+task_name: "eval"
+
+tags: ["dev"]
+
+# passing checkpoint path is necessary for evaluation
+ckpt_path: null

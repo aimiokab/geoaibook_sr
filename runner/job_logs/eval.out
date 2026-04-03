@@ -1,0 +1,236 @@
+Version CUDA : 12.1 / CUDNN : cudnn-8-9-cuda12
+[[36m2025-06-27 10:46:24,296[0m][[34msrc.utils.utils[0m][[32mINFO[0m] - Enforcing tags! <cfg.extras.enforce_tags=True>[0m
+[[36m2025-06-27 10:46:24,302[0m][[34msrc.utils.utils[0m][[32mINFO[0m] - Printing config tree with Rich! <cfg.extras.print_config=True>[0m
+[[36m2025-06-27 10:46:24,303[0m][[34msrc.utils.rich_utils[0m][[33mWARNING[0m] - Field 'callbacks' not found in config. Skipping 'callbacks' config printing...[0m
+CONFIG
+├── datamodule
+│   └── _target_: src.datamodules.distribution_datamodule.PastisSR              
+│       sen2_amount: 1                                                          
+│                                                                               
+├── model
+│   └── _target_: src.models.cfm_module.CFMLitModule                            
+│       _partial_: true                                                         
+│       optimizer:                                                              
+│         _target_: torch.optim.Adam                                            
+│         _partial_: true                                                       
+│         lr: 0.0005                                                            
+│       net:                                                                    
+│         _target_: src.models.components.unet.SuperResModel                    
+│         _partial_: true                                                       
+│         num_res_blocks: 2                                                     
+│         channel_mult:                                                         
+│         - 1                                                                   
+│         - 2                                                                   
+│         - 2                                                                   
+│         - 2                                                                   
+│         num_heads: 4                                                          
+│         num_head_channels: 64                                                 
+│         attention_resolutions:                                                
+│         - 16                                                                  
+│         dropout: 0                                                            
+│         in_channels: 4                                                        
+│         out_channels: 4                                                       
+│         model_channels: 64                                                    
+│         dim: (4, 296, 296)                                                    
+│       augmentations:                                                          
+│         _target_: src.models.components.augmentation.AugmentationModule       
+│         cnf_estimator: null                                                   
+│         l1_reg: 0.0                                                           
+│         l2_reg: 0.0                                                           
+│         squared_l2_reg: 0.0                                                   
+│         jacobian_frobenius_reg: 0.0                                           
+│         jacobian_diag_frobenius_reg: 0.0                                      
+│         jacobian_off_diag_frobenius_reg: 0.0                                  
+│       partial_solver:                                                         
+│         _target_: src.models.components.solver.FlowSolver                     
+│         _partial_: true                                                       
+│         ode_solver: euler                                                     
+│         atol: 1.0e-05                                                         
+│         rtol: 1.0e-05                                                         
+│       test_nfe: 100                                                           
+│       ot_sampler: null                                                        
+│       sigma_min: 0.0                                                          
+│       mode: SISR                                                              
+│       leaveout_timepoint: -1                                                  
+│       plot: true                                                              
+│                                                                               
+├── logger
+│   └── csv:                                                                    
+│         _target_: pytorch_lightning.loggers.csv_logs.CSVLogger                
+│         save_dir: /share/castor/home/okabayas/super-res-fm/runner/logs/eval/ru
+│         name: csv/                                                            
+│         prefix: ''                                                            
+│                                                                               
+├── trainer
+│   └── _target_: pytorch_lightning.Trainer                                     
+│       default_root_dir: /share/castor/home/okabayas/super-res-fm/runner/logs/e
+│       min_epochs: 1                                                           
+│       max_epochs: 400                                                         
+│       accelerator: gpu                                                        
+│       devices: 1                                                              
+│       check_val_every_n_epoch: 20                                             
+│       deterministic: false                                                    
+│                                                                               
+├── paths
+│   └── root_dir: /share/castor/home/okabayas/super-res-fm/runner               
+│       data_dir: /share/castor/home/okabayas/super-res-fm/runner/data/         
+│       log_dir: /share/castor/home/okabayas/super-res-fm/runner/logs/          
+│       output_dir: /share/castor/home/okabayas/super-res-fm/runner/logs/eval/ru
+│       work_dir: /share/castor/home/okabayas/super-res-fm/runner               
+│                                                                               
+├── extras
+│   └── ignore_warnings: false                                                  
+│       enforce_tags: true                                                      
+│       print_config: true                                                      
+│                                                                               
+├── task_name
+│   └── eval                                                                    
+├── tags
+│   └── ['dev']                                                                 
+├── ckpt_path
+│   └── /share/home/okabayas/super-res-fm/runner/logs/train/runs/RGBNIR_orasis/c
+└── local
+    └── root_dir: /share/castor/home/okabayas/super-res-fm/runner               
+        scratch_dir: /share/castor/home/okabayas/super-res-fm/runner            
+        data_dir: /share/castor/home/okabayas/super-res-fm/runner/data/         
+        log_dir: /share/castor/home/okabayas/super-res-fm/runner/logs/          
+                                                                                
+[[36m2025-06-27 10:46:24,344[0m][[34m__main__[0m][[32mINFO[0m] - Instantiating datamodule <src.datamodules.distribution_datamodule.PastisSR>[0m
+[[36m2025-06-27 10:46:27,106[0m][[34m__main__[0m][[32mINFO[0m] - Instantiating model <src.models.cfm_module.CFMLitModule>[0m
+[[36m2025-06-27 10:46:27,106[0m][[34m__main__[0m][[32mINFO[0m] - Passing full datamodule to model[0m
+Setting up [LPIPS] perceptual loss: trunk [alex], v[0.1], spatial [off]
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Loading model from: /share/home/okabayas/.conda/envs/test/lib/python3.10/site-packages/lpips/weights/v0.1/alex.pth
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG19_Weights.IMAGENET1K_V1`. You can also use `weights=VGG19_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+/share/castor/home/okabayas/super-res-fm/runner/src/models/cfm_module.py:147: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  self.temporal_weights = softmax(-torch.tensor([i for i in range(105)], device="cuda")/self.Temp)
+[[36m2025-06-27 10:46:30,164[0m][[34m__main__[0m][[32mINFO[0m] - Instantiating loggers...[0m
+[[36m2025-06-27 10:46:30,164[0m][[34msrc.utils.utils[0m][[32mINFO[0m] - Instantiating logger <pytorch_lightning.loggers.csv_logs.CSVLogger>[0m
+[[36m2025-06-27 10:46:30,167[0m][[34m__main__[0m][[32mINFO[0m] - Instantiating trainer <pytorch_lightning.Trainer>[0m
+/share/home/okabayas/.local/lib/python3.10/site-packages/lightning_lite/plugins/environments/slurm.py:167: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/eval.py trainer=gpu ckpt_path=/share/home/okabay ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+[[36m2025-06-27 10:46:30,460[0m][[34m__main__[0m][[32mINFO[0m] - Logging hyperparameters![0m
+[[36m2025-06-27 10:46:30,464[0m][[34m__main__[0m][[32mINFO[0m] - Starting testing![0m
+Restoring states from the checkpoint path at /share/home/okabayas/super-res-fm/runner/logs/train/runs/RGBNIR_orasis/checkpoints/orasis.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from checkpoint at /share/home/okabayas/super-res-fm/runner/logs/train/runs/RGBNIR_orasis/checkpoints/orasis.ckpt
+Testing: 0it [00:00, ?it/s]Testing:   0%|          | 0/12165 [00:00<?, ?it/s]Testing DataLoader 0:   0%|          | 0/12165 [00:00<?, ?it/s]/share/home/okabayas/.local/lib/python3.10/site-packages/pl_bolts/models/self_supervised/amdim/amdim_module.py:35: UnderReviewWarning: The feature generate_power_seq is currently marked under review. The compatibility with other Lightning projects is not guaranteed and API may change at any time. The API and functionality may change without warning in future releases. More details: https://lightning-bolts.readthedocs.io/en/latest/stability.html
+  "lr_options": generate_power_seq(LEARNING_RATE_CIFAR, 11),
+/share/home/okabayas/.local/lib/python3.10/site-packages/pl_bolts/models/self_supervised/amdim/amdim_module.py:93: UnderReviewWarning: The feature FeatureMapContrastiveTask is currently marked under review. The compatibility with other Lightning projects is not guaranteed and API may change at any time. The API and functionality may change without warning in future releases. More details: https://lightning-bolts.readthedocs.io/en/latest/stability.html
+  contrastive_task: Union[FeatureMapContrastiveTask] = FeatureMapContrastiveTask("01, 02, 11"),
+/share/home/okabayas/.local/lib/python3.10/site-packages/pl_bolts/losses/self_supervised_learning.py:234: UnderReviewWarning: The feature AmdimNCELoss is currently marked under review. The compatibility with other Lightning projects is not guaranteed and API may change at any time. The API and functionality may change without warning in future releases. More details: https://lightning-bolts.readthedocs.io/en/latest/stability.html
+  self.nce_loss = AmdimNCELoss(tclip)
+/share/home/okabayas/.local/lib/python3.10/site-packages/pl_bolts/datamodules/experience_source.py:18: UnderReviewWarning: The feature warn_missing_pkg is currently marked under review. The compatibility with other Lightning projects is not guaranteed and API may change at any time. The API and functionality may change without warning in future releases. More details: https://lightning-bolts.readthedocs.io/en/latest/stability.html
+  warn_missing_pkg("gym")
+Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 1/12165 [00:20<68:33:07, 20.29s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 2/12165 [00:39<67:05:02, 19.86s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 3/12165 [00:59<66:47:52, 19.77s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 4/12165 [01:18<66:38:50, 19.73s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 5/12165 [01:34<63:41:49, 18.86s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 6/12165 [01:54<64:16:27, 19.03s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 7/12165 [02:14<64:41:07, 19.15s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 8/12165 [02:34<65:01:52, 19.26s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 9/12165 [02:53<65:16:43, 19.33s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 10/12165 [03:09<64:00:44, 18.96s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 11/12165 [03:29<64:22:43, 19.07s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 12/12165 [03:49<64:41:21, 19.16s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 13/12165 [04:10<64:55:38, 19.23s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 14/12165 [04:29<65:05:22, 19.28s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 15/12165 [04:45<64:16:46, 19.05s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 16/12165 [05:05<64:31:22, 19.12s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 17/12165 [05:25<64:41:41, 19.17s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 18/12165 [05:46<64:52:55, 19.23s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 19/12165 [06:06<65:01:11, 19.27s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 20/12165 [06:21<64:25:35, 19.10s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 21/12165 [06:42<64:36:12, 19.15s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 22/12165 [07:02<64:45:13, 19.20s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 23/12165 [07:22<64:52:45, 19.24s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 24/12165 [07:42<64:58:44, 19.27s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 25/12165 [07:58<64:28:54, 19.12s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 26/12165 [08:18<64:36:05, 19.16s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 27/12165 [08:38<64:42:10, 19.19s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 28/12165 [08:58<64:48:50, 19.22s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 29/12165 [09:18<64:53:02, 19.25s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 30/12165 [09:33<64:28:51, 19.13s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 31/12165 [09:54<64:35:17, 19.16s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 32/12165 [10:14<64:42:00, 19.20s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
+Testing DataLoader 0:   0%|          | 33/12165 [10:34<64:46:41, 19.22s/it]Your vector field does not have `nn.Parameters` to optimize.
+/share/home/okabayas/.local/lib/python3.10/site-packages/torchdyn/numerics/odeint.py:83: UserWarning: Setting tolerances has no effect on fixed-step methods
+  warn("Setting tolerances has no effect on fixed-step methods")
